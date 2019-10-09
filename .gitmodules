@@ -1,0 +1,6 @@
+[submodule "csharp-torrentapi"]
+	path = csharp-torrentapi
+	url = https://github.com/sKanoodle/csharp-torrentapi.git
+[submodule "transmission-api"]
+	path = transmission-api
+	url = https://github.com/sKanoodle/transmission-api.git
