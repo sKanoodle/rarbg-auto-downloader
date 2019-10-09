@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -53,6 +53,10 @@ namespace RarbgAutoDownloader
             Console.WriteLine($"searching: {series}");
 
             var response = await client.GetResponseAsync(baseSettings);
+
+            if (response.Torrents == default || response.Torrents.Length < 1)
+                return new string[0];
+
             return response.Torrents
                 .Where(t => handler.EpisodeWanted(t.Title) && !Config.Instance.IgnoreTorrentsStartingWith.Any(s => t.Title.StartsWith(s)))
                 .Select(t => t.Download)
