@@ -22,10 +22,10 @@ namespace RarbgAutoDownloader
 
         private DateTime? Parse(string fileName)
         {
-            var match = Regex.Match(fileName, @"[ \.](\d{2}\.\d{2}\.\d{2})[ \.]");
+            var match = Regex.Match(fileName, @"[ \.](\d{2}\.\d{2}\.\d{2})[ \.]"); // match by date
             if (match.Success)
                 return DateTime.ParseExact(match.Groups[1].Value, "yy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
-            match = Regex.Match(fileName, @"[ \.]E(\d+)[ \.]");
+            match = Regex.Match(fileName, @"[ \.]E(\d+)[ \.]"); // match by episode
             if (match.Success)
                 return new DateTime(long.Parse(match.Groups[1].Value));
             return null;
@@ -34,9 +34,11 @@ namespace RarbgAutoDownloader
         public bool EpisodeWanted(string fileName)
         {
             var date = Parse(fileName);
-            if (date.HasValue && CoveredDates.Contains(date.Value))
+            if (!date.HasValue)
+                return true;
+            if (CoveredDates.Contains(date.Value))
                 return false;
-            if (date.HasValue && date.Value.Year < DateTime.Now.Year)
+            if (date.Value.AddYears(1) < DateTime.Now)
                 return false;
             return true;
         }
@@ -60,7 +62,7 @@ namespace RarbgAutoDownloader
         public ActorHandler(string basePath, string actorName)
         {
             Console.WriteLine($"start search in directory for {actorName}");
-            AddFromFilePath(Directory.GetFiles(basePath, actorName, SearchOption.AllDirectories));
+            AddFromFilePath(Directory.GetFiles(basePath, $"*{actorName}*", SearchOption.AllDirectories));
             Console.WriteLine($"finish search in directory for {actorName}");
         }
     }
