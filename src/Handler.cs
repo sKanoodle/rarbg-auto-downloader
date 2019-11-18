@@ -25,7 +25,7 @@ namespace RarbgAutoDownloader
             var match = Regex.Match(fileName, @"[ \.](\d{2}\.\d{2}\.\d{2})[ \.]"); // match by date
             if (match.Success)
                 return DateTime.ParseExact(match.Groups[1].Value, "yy.MM.dd", System.Globalization.CultureInfo.InvariantCulture);
-            match = Regex.Match(fileName, @"[ \.]E(\d+)[ \.]"); // match by episode
+            match = Regex.Match(fileName, @"[ \.0-9]E(\d+)[ \.]"); // match by episode
             if (match.Success)
                 return new DateTime(long.Parse(match.Groups[1].Value));
             return null;
